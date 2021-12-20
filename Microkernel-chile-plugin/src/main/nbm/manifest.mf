@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: edu/unicauca/plugins/chile/plugin/Bundle.properties
-
