@@ -18,7 +18,8 @@ import java.util.logging.Logger;
  */
 public class RabbitListener implements Runnable{
 
-    private final static String QUEUE_NAME = "ProductstoDelivery";
+    // private final static String QUEUE_NAME = "ProductstoDelivery";
+    private final static String EXCHANGE_NAME = "ProductstoDelivery";
     ISubscriber myOffice;
 
     public RabbitListener(ISubscriber office) {
@@ -33,7 +34,10 @@ public class RabbitListener implements Runnable{
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
             
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+            String queueName = channel.queueDeclare().getQueue();
+            channel.queueBind(queueName, EXCHANGE_NAME, "");
+            //channel.queueDeclare(QUEUE_NAME, false, false, false, null);
             System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
             
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
@@ -41,7 +45,7 @@ public class RabbitListener implements Runnable{
                 System.out.println(" [x] Received '" + message + "'");
                 myOffice.onMessage(message);
             };
-            channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
         } catch (IOException | TimeoutException ex) {
             Logger.getLogger(RabbitListener.class.getName()).log(Level.SEVERE, null, ex);
         }

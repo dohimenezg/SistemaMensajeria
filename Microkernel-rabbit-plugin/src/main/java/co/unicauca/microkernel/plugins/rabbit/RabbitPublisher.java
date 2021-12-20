@@ -21,14 +21,16 @@ public class RabbitPublisher implements IPublisherPlugin{
 
     @Override
     public void publish(String msg) {
-        String QUEUE_NAME = "ProductstoDelivery";
+        String EXCHANGE_NAME = "ProductstoDelivery";
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         try {
             com.rabbitmq.client.Connection connection = factory.newConnection();
             com.rabbitmq.client.Channel channel = connection.createChannel();
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            channel.basicPublish("", QUEUE_NAME, null, msg.getBytes(StandardCharsets.UTF_8));
+            // channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+            channel.basicPublish(EXCHANGE_NAME, "", null, msg.getBytes(StandardCharsets.UTF_8));
+            // channel.basicPublish("", QUEUE_NAME, null, msg.getBytes(StandardCharsets.UTF_8));
             System.out.println(" [x] Sent '" + msg + "'");
         } catch (IOException | TimeoutException ex) {
             Logger.getLogger(RabbitPublisher.class.getName()).log(Level.SEVERE, null, ex);

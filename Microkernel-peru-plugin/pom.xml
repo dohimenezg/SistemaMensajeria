@@ -7,9 +7,10 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>course.microkernel</groupId>
+            <groupId>co.unicauca.microkernel.common</groupId>
             <artifactId>Microkernel-common</artifactId>
             <version>0.1.0</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     <properties>

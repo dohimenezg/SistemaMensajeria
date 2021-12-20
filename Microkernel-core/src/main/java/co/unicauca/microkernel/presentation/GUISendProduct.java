@@ -22,6 +22,7 @@ public class GUISendProduct extends javax.swing.JFrame{
     private ProductService productService;
     private DeliveryService deliveryService;
     List<Product> products;
+    private Delivery delivery;
     Publisher publisher;
 
     /**
@@ -35,9 +36,6 @@ public class GUISendProduct extends javax.swing.JFrame{
         for (int index = 0; index < products.size(); index++) {
         jComboBox1.addItem(products.get(index).getName());
         }
-        jTextField4.setEnabled(false);
-        jTextField4.setText("...");
-        jButton2.setVisible(false);
     }
 
     /**
@@ -58,17 +56,22 @@ public class GUISendProduct extends javax.swing.JFrame{
         jLabel4 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jTextField7 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField6 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setText("Envío de producto");
         getContentPane().add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel1.setLayout(new java.awt.GridLayout(4, 2));
+        jPanel1.setLayout(new java.awt.GridLayout(6, 2));
 
         jLabel2.setText("Seleccione el producto");
         jPanel1.add(jLabel2);
@@ -83,13 +86,21 @@ public class GUISendProduct extends javax.swing.JFrame{
         jPanel1.add(jLabel4);
         jPanel1.add(jTextField3);
 
-        jLabel5.setText("Costo del Envío");
+        jLabel5.setText("Indique la dirección");
         jPanel1.add(jLabel5);
-        jPanel1.add(jTextField4);
+        jPanel1.add(jTextField7);
+
+        jLabel6.setText("Indique la ciudad");
+        jPanel1.add(jLabel6);
+        jPanel1.add(jTextField5);
+
+        jLabel7.setText("Costo de envio");
+        jPanel1.add(jLabel7);
+        jPanel1.add(jTextField6);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jButton1.setText("Calcular Valor de Envío");
+        jButton1.setText("Calcular costo");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -97,7 +108,8 @@ public class GUISendProduct extends javax.swing.JFrame{
         });
         jPanel2.add(jButton1);
 
-        jButton2.setText("Realizar Envío Pago a Contra Entrega");
+        jButton2.setText("Realizar Envío");
+        jButton2.setEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -113,27 +125,28 @@ public class GUISendProduct extends javax.swing.JFrame{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Product selectedProduct = products.get(this.jComboBox1.getSelectedIndex());
-        Delivery deliveryEntity = new Delivery(selectedProduct, 
-                                                Double.parseDouble(jTextField2.getText()), 
-                                                jTextField3.getText());
+        delivery = new Delivery(selectedProduct,
+                                Double.parseDouble(jTextField2.getText()), 
+                                jTextField3.getText());
         try {
             deliveryService = new DeliveryService();
-            double cost = deliveryService.calculateDeliveryCost(deliveryEntity);
-            jTextField4.setText(""+cost);
+            double cost = deliveryService.calculateDeliveryCost(delivery);
+            jTextField6.setText(""+cost);
             jButton2.setVisible(true);
+            delivery.setPrice(cost);
+            delivery.setAddress(jTextField7.getText());
+            delivery.setCity(jTextField5.getText());
+            jButton2.setEnabled(true);
         } catch (Exception exception) {
             System.out.println("No fue posible calcular el costo del envío. " + exception.getMessage());
         }
-
-        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        Product selectedProduct = products.get(this.jComboBox1.getSelectedIndex());
         Gson gson = new Gson();
-        String msgJson = gson.toJson(selectedProduct);
+        String msgJson = gson.toJson(delivery);
         publisher.publish(msgJson);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -147,11 +160,15 @@ public class GUISendProduct extends javax.swing.JFrame{
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables
 
 }

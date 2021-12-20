@@ -10,9 +10,10 @@
     <name>Microkernel-colombia-plugin</name>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>co.unicauca.microkernel.common</groupId>
             <artifactId>Microkernel-common</artifactId>
-            <version>${project.version}</version>
+            <version>0.1.0</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     <properties>

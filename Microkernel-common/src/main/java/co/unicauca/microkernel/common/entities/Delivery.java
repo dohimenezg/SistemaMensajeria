@@ -6,13 +6,18 @@ package co.unicauca.microkernel.common.entities;
  */
 public class Delivery {
 
+    
     private Product product;
     private double distance;
     /**
      * Código del país donde será entregado el producto.
      * */
     private String countryCode;
+    private double price;
+    private String address;
+    private String city;
 
+    
     public Delivery(Product product, double distance, String countryCode) {
         this.product = product;
         this.distance = distance;
@@ -35,11 +40,36 @@ public class Delivery {
         this.distance = distance;
     }
 
-    public String getCountryCode() {
+        public String getCountryCode() {
         return countryCode;
     }
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
 }

@@ -5,7 +5,7 @@
  */
 package co.unicauca.subscriber.deliveryproducts.presentation;
 
-import co.unicauca.microkernel.common.entities.Product;
+import co.unicauca.microkernel.common.entities.Delivery;
 import co.unicauca.subscriber.deliveryproducts.infra.ISubscriber;
 import co.unicauca.subscriber.deliveryproducts.infra.RabbitListener;
 import com.google.gson.Gson;
@@ -101,9 +101,10 @@ public class DeliveryOffice extends javax.swing.JFrame implements ISubscriber {
 
     @Override
     public void onMessage(String msg) {
+        
       Gson gson = new Gson();
-      Product product = gson.fromJson(msg, Product.class);
-      modelList.addElement(product.getName());
+      Delivery delivery = gson.fromJson(msg, Delivery.class);
+      modelList.addElement("Producto " + delivery.getProduct().getName());
       jList1.paintImmediately(jList1.getBounds());
     }
 }
